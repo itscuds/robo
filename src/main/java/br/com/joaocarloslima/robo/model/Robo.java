@@ -1,22 +1,22 @@
 package br.com.joaocarloslima.robo.model;
 
-import java.util.Random;
+import java.util.Objects;
 
 public class Robo {
     private Posicao posicao;
     private Direcao direcao = Direcao.DIREITA;
-    private String modo;
+    private Rota rota;
     private int passos;
     private int batidas;
-    private Random random = new Random();
 
-    public Robo(Posicao inicio, String modo) {
-        this.posicao = inicio;
-        this.modo = modo;
+    public Robo(Posicao inicio, Rota rota) {
+        this.posicao = Objects.requireNonNull(inicio);
+        this.rota = Objects.requireNonNull(rota);
     }
 
     public void andar(Sala sala) {
-        direcao = proximaDirecao(sala);
+        direcao = rota.proximaDirecao(sala, posicao);
+
         Posicao destino = posicao.mover(direcao);
         if (sala.livre(destino)) {
             posicao = destino;
@@ -27,34 +27,13 @@ public class Robo {
         passos++;
     }
 
-    // cada modo de limpeza novo vira mais um if aqui dentro...
-    private Direcao proximaDirecao(Sala sala) {
-        if (modo.equals("Aleatória")) {
-            return sortearDirecao();
-        }
 
-        if (modo.equals("Ricochete")) {
-            // segue reto e, quando bate, sorteia outra direção
-            if (!sala.livre(posicao.mover(direcao))) {
-                direcao = sortearDirecao();
-            }
-            return direcao;
-        }
-
-        return direcao;
-    }
-
-    private Direcao sortearDirecao() {
-        Direcao[] direcoes = Direcao.values();
-        return direcoes[random.nextInt(direcoes.length)];
-    }
-
-    public void setModo(String modo) {
-        this.modo = modo;
+    public void setRota(Rota rota){
+        this.rota = Objects.requireNonNull(rota);
     }
 
     public String getNomeDaRota() {
-        return modo;
+        return rota.getNome();
     }
 
     public Posicao getPosicao() {
