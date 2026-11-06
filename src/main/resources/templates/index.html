@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Robô Aspirador</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; overflow: hidden; font-family: "Trebuchet MS", Verdana, sans-serif; background: #e9e2d6; }
+        #cena { position: fixed; inset: 0; }
+        .placa {
+            position: fixed; top: 16px; left: 16px; padding: 10px 16px;
+            background: #37474f; color: #fff; border: 3px solid #fff; border-radius: 6px;
+            font-weight: bold; font-size: 22px; letter-spacing: 1px; box-shadow: 0 3px 0 #1c262b;
+        }
+        .painel {
+            position: fixed; right: 16px; bottom: 16px; width: 300px; padding: 14px;
+            background: #fffdf5; border: 3px solid #333; border-radius: 8px; box-shadow: 4px 4px 0 #333;
+        }
+        .painel label { display: block; font-size: 13px; margin-bottom: 10px; }
+        .painel select { margin-left: 6px; padding: 3px 6px; border: 2px solid #333; border-radius: 4px; font-weight: bold; }
+        .botoes { display: flex; gap: 8px; margin-bottom: 12px; }
+        .botoes button, #ranking {
+            flex: 1; padding: 9px 6px; border: 2px solid #333; border-radius: 6px; background: #fff;
+            font-weight: bold; font-size: 14px; cursor: pointer; box-shadow: 2px 2px 0 #333;
+        }
+        .botoes button:active, #ranking:active { transform: translate(2px, 2px); box-shadow: none; }
+        #play { background: #66bb6a; }
+        #play.pausado { background: #ffb300; }
+        .dado { display: flex; justify-content: space-between; font-size: 14px; padding: 3px 0; }
+        .dado b { font-size: 15px; }
+        .barra { height: 10px; background: #ddd; border: 2px solid #333; border-radius: 3px; margin: 2px 0 8px; }
+        .barra div { height: 100%; background: #43a047; }
+        #ranking { width: 100%; margin-top: 8px; background: #90caf9; }
+        #velocidade { width: 100%; }
+        .quadro {
+            position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 360px; padding: 18px;
+            background: #fffdf5; border: 3px solid #333; border-radius: 8px; box-shadow: 6px 6px 0 #333; display: none;
+        }
+        .quadro h2 { margin: 0 0 4px; }
+        .quadro p { margin: 0 0 12px; color: #666; font-size: 13px; }
+        .quadro table { width: 100%; border-collapse: collapse; font-size: 15px; }
+        .quadro td, .quadro th { padding: 6px 4px; border-bottom: 1px dashed #bbb; text-align: left; }
+        .quadro td:nth-child(n+3), .quadro th:nth-child(n+3) { text-align: right; }
+        .quadro button { margin-top: 14px; padding: 6px 14px; border: 2px solid #333; border-radius: 6px; background: #fff; font-weight: bold; cursor: pointer; }
+        .dica { position: fixed; left: 16px; bottom: 16px; color: #333; font-size: 13px; background: #ffffffcc; padding: 6px 10px; border-radius: 6px; }
+        #aviso { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); background: #c62828; color: #fff; padding: 8px 14px; border-radius: 6px; font-weight: bold; display: none; }
+    </style>
+</head>
+
+<body>
+    <div id="cena"></div>
+
+    <div class="placa">🧹 ROBÔ ASPIRADOR</div>
+    <div id="aviso"></div>
+
+    <div class="painel">
+        <label>Rota:
+            <select id="rota"></select>
+        </label>
+        <div class="botoes">
+            <button id="play">▶ Ligar</button>
+            <button id="passo">Um passo</button>
+            <button id="reiniciar">↺</button>
+        </div>
+        <label>Velocidade
+            <input id="velocidade" type="range" min="1" max="30" value="8">
+        </label>
+        <div class="dado"><span>🔋 Bateria</span><b id="bateria">300 passos</b></div>
+        <div class="barra"><div id="barraBateria" style="width:100%"></div></div>
+        <div class="dado"><span>✨ Sala limpa</span><b id="limpo">0%</b></div>
+        <div class="dado"><span>💥 Batidas</span><b id="batidas">0</b></div>
+        <button id="ranking">🏆 Ranking das rotas</button>
+    </div>
+
+    <div class="quadro" id="quadro">
+        <h2>🏆 Ranking</h2>
+        <p>Cada rota limpa uma sala nova com a bateria cheia.</p>
+        <table>
+            <thead><tr><th>#</th><th>Rota</th><th>Limpo</th><th>Batidas</th></tr></thead>
+            <tbody id="tabela"></tbody>
+        </table>
+        <button id="fechar">Fechar</button>
+    </div>
+
+    <div class="dica">Arraste para girar a câmera · role para aproximar</div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module" src="/js/robo.js"></script>
+</body>
+
+</html>
